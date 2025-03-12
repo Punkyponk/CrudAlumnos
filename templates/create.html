@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear Alumno</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Agregar Nuevo Alumno</h1>
+        <form action="{{ url_for('create') }}" method="POST">
+            <label for="nombre">Nombre:</label>
+            <input type="text" name="nombre" required>
+
+            <label for="edad">Edad:</label>
+            <input type="number" name="edad" required>
+
+            <label for="carrera">Carrera:</label>
+            <input type="text" name="carrera" required>
+
+            <button type="submit">Guardar</button>
+        </form>
+        <a href="{{ url_for('index') }}" class="cancel">Volver</a>
+    </div>
+</body>
+</html>
