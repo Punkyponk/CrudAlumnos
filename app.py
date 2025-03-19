@@ -54,6 +54,29 @@ def create():
         return redirect(url_for('index'))
     return render_template('create.html')
 
+# Actualizar parcialmente un alumno - Método PATCH
+@app.route('/alumno/<int:id>', methods=['PATCH'])
+def update_alumno(id):
+    # Buscar el alumno por su ID
+    alumno = Alumno.query.get_or_404(id)
+
+    # Obtener los datos que queremos actualizar (pueden ser parciales)
+    data = request.get_json()
+
+    # Actualizar solo los campos que hayan sido proporcionados
+    if 'nombre' in data:
+        alumno.nombre = data['nombre']
+    if 'edad' in data:
+        alumno.edad = data['edad']
+    if 'carrera' in data:
+        alumno.carrera = data['carrera']
+
+    # Confirmar los cambios en la base de datos
+    db.session.commit()
+
+    # Responder con los datos del alumno actualizado
+    return jsonify({'id': alumno.id, 'nombre': alumno.nombre, 'edad': alumno.edad, 'carrera': alumno.carrera}), 200
+
 # Actualizar un alumno
 @app.route('/update/<int:id>', methods=['GET', 'POST'])
 def update(id):
