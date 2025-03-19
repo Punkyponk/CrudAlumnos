@@ -77,6 +77,15 @@ def update_alumno(id):
     # Responder con los datos del alumno actualizado
     return jsonify({'id': alumno.id, 'nombre': alumno.nombre, 'edad': alumno.edad, 'carrera': alumno.carrera}), 200
 
+# Obtener los detalles de un alumno específico - Método GET
+@app.route('/alumno/<int:id>', methods=['GET'])
+def get_alumno(id):
+    # Buscar el alumno por su ID
+    alumno = Alumno.query.get_or_404(id)
+
+    # Responder con los datos del alumno
+    return jsonify({'id': alumno.id, 'nombre': alumno.nombre, 'edad': alumno.edad, 'carrera': alumno.carrera}), 200
+
 # Actualizar un alumno
 @app.route('/update/<int:id>', methods=['GET', 'POST'])
 def update(id):
