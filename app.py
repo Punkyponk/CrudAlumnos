@@ -92,7 +92,20 @@ def update(id):
 
     return render_template('update.html', alumno=alumno)
 
-# Eliminar un alumno
+# Eliminar un alumno - Método DELETE
+@app.route('/alumno/<int:id>', methods=['DELETE'])
+def delete_alumno(id):
+    # Buscar el alumno por su ID
+    alumno = Alumno.query.get_or_404(id)
+
+    # Eliminar el alumno de la base de datos
+    db.session.delete(alumno)
+    db.session.commit()
+
+    # Responder con un mensaje de éxito
+    return jsonify({'message': 'Alumno eliminado exitosamente'}), 200
+
+# Eliminar un alumno (Vista)
 @app.route('/delete/<int:id>', methods=['GET', 'POST'])
 def delete(id):
     alumno = Alumno.query.get_or_404(id)
