@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, jsonify
 from models import db, Alumno  # Importamos db y el modelo Alumno desde models.py
 
 # Crear la app Flask
@@ -19,7 +19,27 @@ def index():
     alumnos = Alumno.query.all()
     return render_template('index.html', alumnos=alumnos)
 
-# Crear un nuevo alumno
+# Crear un nuevo alumno - Método POST
+@app.route('/alumno', methods=['POST'])
+def create_alumno():
+    # Obtener datos enviados en el cuerpo de la solicitud en formato JSON
+    data = request.get_json()
+
+    # Validar que los datos contengan los campos necesarios
+    if 'nombre' not in data or 'edad' not in data or 'carrera' not in data:
+        return jsonify({'error': 'Datos incompletos'}), 400
+
+    # Crear un nuevo objeto Alumno con los datos recibidos
+    nuevo_alumno = Alumno(nombre=data['nombre'], edad=data['edad'], carrera=data['carrera'])
+    
+    # Agregar el nuevo alumno a la base de datos
+    db.session.add(nuevo_alumno)
+    db.session.commit()
+
+    # Responder con el alumno recién creado
+    return jsonify({'id': nuevo_alumno.id, 'nombre': nuevo_alumno.nombre, 'edad': nuevo_alumno.edad, 'carrera': nuevo_alumno.carrera}), 201
+
+# Crear un nuevo alumno (Vista)
 @app.route('/create', methods=['GET', 'POST'])
 def create():
     if request.method == 'POST':
